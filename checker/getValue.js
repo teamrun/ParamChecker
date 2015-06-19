@@ -1,7 +1,7 @@
 // requires: koa-router, koa-better-body
 var GET_FUNC = {
     fromUrl: function(key){
-        return function(key){
+        return function(){
             return this.params[key];
         }
     },

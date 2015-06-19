@@ -41,7 +41,9 @@ Checker.prototype.requires = function(name, type, from, opt){
     // 获取参数
     switch(true){
         case (from == 'body' || from == 'query' || from == 'url'):
-            getFunc = get_f['from'+from.capitalize()](name);
+            var getFnName = 'from'+from.capitalize();
+            // console.log(util.format('get %s from %s by %s', name, from,  getFnName));
+            getFunc = get_f[getFnName](name);
             break;
         default:
             getFunc = get_f._default(name);
