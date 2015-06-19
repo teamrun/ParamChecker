@@ -1,0 +1,33 @@
+{
+  "name": "ParamChecker",
+  "version": "0.0.5",
+  "description": "param checker for node framework",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.souche.com:chenliangliang/paramchecker.git"
+  },
+  "keywords": [
+    "param",
+    "checker",
+    "validator",
+    "koa",
+    "node"
+  ],
+  "author": "teamrun",
+  "license": "mit",
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "koa": "^0.21.0",
+    "koa-better-body": "^1.0.17",
+    "koa-qs": "^2.0.0",
+    "koa-router": "4.3.2",
+    "request": "^2.58.0"
+  }
+}
