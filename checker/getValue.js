@@ -12,7 +12,6 @@ var GET_FUNC = {
     },
     fromBody: function(key){
         return function(){
-            log.debug(this.request.body);
             return this.request.body.fields[key];
         }
     },
