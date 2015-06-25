@@ -1,24 +1,35 @@
-var request = require('request');
+global.expect = require('expect.js');
+global.request = require('request');
+global.co = require('co');
+global.thunkify = require('thunkify');
 
-var resStr = 'Hello, koa param checker';
+global.resStr = 'Hello, koa param checker';
+var baseUrl = 'http://localhost:4040';
 
-function sendReq(){
-    request.get({
-        url: 'http://localhost:4040/9527',
-        qs: {
-            index: 1,
-            complete: false
-        }
-    },function(err, resp, body){
-        if(err){
-            console.log(err);
-            return;
-        }
-        console.log( body === resStr);
-        console.log( body );
-    })
+function req(action, params, callback){
+    params.url = baseUrl + params.url;
+    request[action](params, callback);
 }
 
-setTimeout(function(){
-    sendReq()
-}, 2000);
+global.req = thunkify(req);
+
+var emptyF = function(){};
+global.coit = function(desc, gen, thenF, catchF){
+    thenF = thenF || emptyF;
+    catchF = catchF || emptyF;
+    it(desc, function(done){
+        co(gen)
+            .then(function(){
+                thenF.apply(this, arguments);
+                done();
+            })
+            .catch(function(e){
+                catchF(e);
+                expect(e);
+                done();
+            })
+    })
+};
+
+
+require('./spec/url-query-body');

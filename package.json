@@ -7,7 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "node test/server & && mocha",
+    "spec": " mocha"
   },
   "repository": {
     "type": "git",
@@ -23,11 +24,13 @@
   "author": "teamrun",
   "license": "mit",
   "devDependencies": {
+    "co": "^4.5.4",
     "expect.js": "^0.3.1",
     "koa": "^0.21.0",
     "koa-better-body": "^1.0.17",
     "koa-qs": "^2.0.0",
     "koa-router": "4.3.2",
-    "request": "^2.58.0"
+    "request": "^2.58.0",
+    "thunkify": "^2.1.2"
   }
 }
