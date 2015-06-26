@@ -14,20 +14,23 @@ function req(action, params, callback){
 global.req = thunkify(req);
 
 var emptyF = function(){};
-global.coit = function(desc, gen, thenF, catchF){
-    thenF = thenF || emptyF;
-    catchF = catchF || emptyF;
+
+// 弃用coit, 因为co会在异步完成的调用then/catch中一直catch错误
+// 导致不能实现expect的抛错, 达不到expect/assert的作用
+// 换用thunkify的req, 接收成功时的callback, 在callback里面做expect
+global.reqit = function(desc, reqF, sucF){
+    sucF = sucF || emptyF;
     it(desc, function(done){
-        co(gen)
-            .then(function(){
-                thenF.apply(this, arguments);
-                done();
-            })
-            .catch(function(e){
-                catchF(e);
-                expect(e);
-                done();
-            })
+        reqF(function(err, resp, body){
+            if(!err){
+                sucF(resp, body);
+            }
+            else{
+                console.log('请求出错!');
+                expect(err).to.be(null);
+            }
+            done();
+        })
     })
 };
 

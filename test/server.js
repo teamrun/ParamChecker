@@ -28,7 +28,7 @@ Binder(app, {
     action: 'post',
     md: bodyParse(),
     param: Checker()
-        .requires('name', 'string', 'body')
+        .requires('username', 'string', 'body')
         .requires('password', 'string', 'body'),
     handler: function*(next){
         console.log('cp of', this.path, this.cp);
@@ -37,6 +37,19 @@ Binder(app, {
     }
 });
 
+Binder(app, {
+    url: '/body/has_url_p/:id',
+    action: 'post',
+    md: bodyParse(),
+    param: Checker()
+        .requires('id', 'string')
+        .requires('username', 'string')
+        .requires('password', 'string'),
+    handler: function*(next){
+        console.log('cp of', this.path, this.cp);
+        this.body = this.cp;
+    }
+});
 // app.post('/body', bodyParse(), function*(){
 //     console.log(this.request.body);
 //     this.body = resStr;

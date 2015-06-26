@@ -1,27 +1,40 @@
 describe('first spec', function(){
-    coit('能够检查url, query中的参数', function*(){
-        var resp = yield req('get', {
+    reqit('能够检查url, query中的参数',req('get', {
             url: '/url/query/123',
             qs: {
                 index: 456,
                 complete: true
             }
-        });
-        return resp;
-    },function(result){
-        expect(result[1]).to.be(resStr);
+        }), function(resp, body){
+        expect(body).to.be(resStr);
     });
 
-    coit('能够检查body中的参数: x-www-form-urlencoded', function*(){
-        var resp = yield req('post', {
+    reqit('能够检查body中的参数: x-www-form-urlencoded',  req('post', {
             url: '/body/encoded',
             form: {
-                name: 'chenllos',
+                username: 'chenllos',
                 password: 'sasuke'
             }
-        });
-        return resp;
-    },function(result){
-        expect(result[1]).to.be(resStr);
+        }),function(resp, body){
+        expect(body).to.be(resStr);
+    });
+
+    reqit('如果不指定from, 就会url-query-body的顺序取',  req('post', {
+            url: '/body/has_url_p/url_id',
+            qs: {
+                id: 'query_id',
+                username: 'query_name'
+            },
+            form: {
+                id: 'body_id',
+                username: 'body_name',
+                password: 'body_pass'
+            }
+        }), function(resp, body){
+        var body = body;
+        var data = JSON.parse(body);
+        expect(data.id).to.be('url_id');
+        expect(data.username).to.be('query_name');
+        expect(data.password).to.be('body_pass');
     });
 });
