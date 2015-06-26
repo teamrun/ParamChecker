@@ -6,8 +6,8 @@ describe('first spec', function(){
                 complete: true
             }
         }), function(resp, body){
-        expect(body).to.be(resStr);
-    });
+            expect(body).to.be(resStr);
+        });
 
     reqit('能够检查body中的参数: x-www-form-urlencoded',  req('post', {
             url: '/body/encoded',
@@ -16,8 +16,8 @@ describe('first spec', function(){
                 password: 'sasuke'
             }
         }),function(resp, body){
-        expect(body).to.be(resStr);
-    });
+            expect(body).to.be(resStr);
+        });
 
     reqit('如果不指定from, 就会url-query-body的顺序取',  req('post', {
             url: '/body/has_url_p/url_id',
@@ -31,10 +31,10 @@ describe('first spec', function(){
                 password: 'body_pass'
             }
         }), function(resp, body){
-        var body = body;
-        var data = JSON.parse(body);
-        expect(data.id).to.be('url_id');
-        expect(data.username).to.be('query_name');
-        expect(data.password).to.be('body_pass');
-    });
+            var body = body;
+            var data = JSON.parse(body);
+            expect(data.id).to.be('url_id');
+            expect(data.username).to.be('query_name');
+            expect(data.password).to.be('body_pass');
+        });
 });
