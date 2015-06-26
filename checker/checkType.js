@@ -25,11 +25,19 @@ function getType(value){
 
 function checkType(value, requiredType){
     var valueType = getType(value);
+    // 如果没有指定类型
+    // 直接把取到的返回
+    if(!requiredType){
+        return {
+            err: null,
+            data: value
+        };
+    }
     var wrongTypeErrMsg = util.format('required %s but got %s', requiredType, valueType);
     // 类型很匹配, 那就直接拿去用
     if(requiredType === valueType){
         return {
-            err: null, 
+            err: null,
             data: value
         };
     }

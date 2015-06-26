@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node test/server & && mocha",
+    "test": "node test/server/index.js & && mocha",
     "spec": " mocha"
   },
   "repository": {
@@ -32,5 +32,9 @@
     "koa-router": "4.3.2",
     "request": "^2.58.0",
     "thunkify": "^2.1.2"
+  },
+  "dependencies": {
+    "glob": "^5.0.10",
+    "koa-router": "^5.1.2"
   }
 }
