@@ -2,8 +2,10 @@ var path = require('path');
 var util = require('util');
 var glob = require('glob');
 
+var validator = require('./router-validate');
+
 function bindToRouter(router, opt){
-    var url = opt.url, action = opt.action, handler = opt.handler;
+    var url = opt.url, action = opt.action.toLowerCase(), handler = opt.handler;
     var md = opt.md;
     var checker = opt.param;
     // action校验: 没有 就跳过
@@ -87,7 +89,20 @@ function scanAndBind(folderAbspath, router){
         var _module = require(f);
         // 如果有controllers
         if(_module.controllers){
-            _module.controllers.forEach(function(ctrlOpt){
+            _module.controllers.forEach(function(ctrlOpt, index){
+                var checkRes = validator(ctrlOpt);
+                // 检查结果不是true 跳过 不绑定
+                if(checkRes !== true){
+                    console.log(f);
+                    console.log(folderAbspath);
+                    var readFilePath = '[controller]/' + path.relative(folderAbspath, f);
+                    var resMsg = checkRes.map(function(p){
+                        return '    ' + p;
+                    }).join('\n');
+                    var msg = util.format('can not bind this route: \n  file: %s\n  index: %d\n  errmsg:\n%s', readFilePath, index, resMsg);
+                    console.warn(msg);
+                    return;
+                }
                 ctrlOpt.url = urlProcessor(ctrlOpt.url, f, folderAbspath);
                 // console.log(ctrlOpt.url);
                 bindToRouter(router, ctrlOpt);

@@ -26,6 +26,6 @@ module.exports.controllers = [
     },
     // {
     //     url: undefined,
-    //     action: 'get'
+    //     // action: 'get'
     // }
 ]
