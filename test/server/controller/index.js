@@ -1,6 +1,7 @@
 var bodyParse = require('koa-better-body');
 
 var ParamChecker = require('../../../');
+var constVars = require('../../const');
 
 var Checker = ParamChecker.Checker;
 var resStr = 'Hello, koa param checker';
@@ -15,7 +16,7 @@ module.exports.controllers = [
             .requires('complete', 'boolean', 'query'),
         handler: function*(next){
             console.log('cp of', this.path, this.cp);
-            this.body = resStr;
+            this.body = constVars.resStr;
             // yield next;
         }
     },
@@ -28,7 +29,7 @@ module.exports.controllers = [
             .requires('password', 'string', 'body'),
         handler: function*(next){
             console.log('cp of', this.path, this.cp);
-            this.body = resStr;
+            this.body = constVars.resStr;
             // yield next;
         }
     },
@@ -43,6 +44,13 @@ module.exports.controllers = [
         handler: function*(next){
             console.log('cp of', this.path, this.cp);
             this.body = this.cp;
+        }
+    },
+    {
+        url: '/no-param-define',
+        action: 'get',
+        handler: function*(){
+            this.body = constVars.noChecker;
         }
     }
 ]

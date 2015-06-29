@@ -3,11 +3,20 @@ global.request = require('request');
 global.co = require('co');
 global.thunkify = require('thunkify');
 
-global.resStr = 'Hello, koa param checker';
+global.constVars = require('./const');
 var baseUrl = 'http://localhost:4040';
 
 function req(action, params, callback){
-    params.url = baseUrl + params.url;
+    // 只传一个url的情况
+    if(typeof params == 'string'){
+        params ={
+            url: baseUrl + params.url
+        }
+    }
+    else{
+        params.url = baseUrl + params.url;
+    }
+
     request[action](params, callback);
 }
 
@@ -36,3 +45,4 @@ global.reqit = function(desc, reqF, sucF){
 
 
 require('./spec/url-query-body');
+require('./spec/binder');
