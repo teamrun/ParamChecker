@@ -1,10 +1,16 @@
 var path = require('path');
+var util = require('util');
 var glob = require('glob');
 
 function bindToRouter(router, opt){
     var url = opt.url, action = opt.action, handler = opt.handler;
     var md = opt.md;
     var checker = opt.param;
+    // action校验: 没有 就跳过
+    // http method类型...
+    if(!action){
+        return;
+    }
 
     // 为方便绑定多个路由, 将绑定的参数做成arr
     var bindArgs = [];
@@ -43,13 +49,47 @@ function bindToApp(app, router){
     app.use(router.routes());
 }
 
-function scanAndBind(folderAbspath, basePath, router){
+function urlProcessor(routeUrl, filePath, controllerFolderPath){
+    var fPath = filePath, cPath = controllerFolderPath;
+    if(routeUrl instanceof RegExp){
+        return routeUrl;
+    }
+    else if(typeof routeUrl == 'string'){
+        // 扫描的文件 相对于 controller文件夹的路径
+        var relativeToCtrlFolder = path.relative(controllerFolderPath, fPath);
+        var r = relativeToCtrlFolder;
+        // 取目录路径
+        var pathName = path.dirname(r);
+        var fileName = path.basename(r, path.extname(r));
+        var urlPrefix = '';
+        // controller下的直属一层 相对路径是.
+        if(pathName === '.'){
+            urlPrefix = '';
+        }
+        else{
+            urlPrefix = '/' + pathName
+        }
+        // index.js 不用再加一层
+        if(fileName === 'index'){ }
+        else{
+            urlPrefix += '/' + fileName;
+        }
+        return urlPrefix + routeUrl;
+    }
+    else{
+        return routeUrl;
+    }
+}
+
+function scanAndBind(folderAbspath, router){
     var files = glob.sync(folderAbspath + '/**/*.+(js|coffee)');
     files.forEach(function(f){
         var _module = require(f);
         // 如果有controllers
         if(_module.controllers){
             _module.controllers.forEach(function(ctrlOpt){
+                ctrlOpt.url = urlProcessor(ctrlOpt.url, f, folderAbspath);
+                // console.log(ctrlOpt.url);
                 bindToRouter(router, ctrlOpt);
             });
         }
@@ -58,6 +98,6 @@ function scanAndBind(folderAbspath, basePath, router){
 
 module.exports = function(app, router, opt){
     var folderPath = path.join(opt.basePath, opt.controllerPath || 'controller');
-    scanAndBind(folderPath, opt.basePath, router);
+    scanAndBind(folderPath, router);
     bindToApp(app, router);
 }
