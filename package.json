@@ -1,5 +1,5 @@
 {
-  "name": "ParamChecker",
+  "name": "param-checker",
   "version": "0.2.0",
   "description": "param checker for node framework",
   "main": "index.js",
@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test-server": "node test/server/index.js && mocha",
+    "test-server": "node test/server/index.js",
     "test": "mocha"
   },
   "repository": {
