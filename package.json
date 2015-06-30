@@ -1,6 +1,6 @@
 {
   "name": "param-checker",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "param checker for node framework",
   "main": "index.js",
   "directories": {
@@ -28,13 +28,12 @@
     "expect.js": "^0.3.1",
     "koa": "^0.21.0",
     "koa-better-body": "^1.0.17",
-    "koa-qs": "^2.0.0",
-    "koa-router": "4.3.2",
     "request": "^2.58.0",
     "thunkify": "^2.1.2"
   },
   "dependencies": {
     "glob": "^5.0.10",
+    "koa-qs": "^2.0.0",
     "koa-router": "^5.1.2"
   },
   "jshintConfig": {
