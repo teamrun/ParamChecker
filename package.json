@@ -1,14 +1,14 @@
 {
   "name": "ParamChecker",
-  "version": "0.0.5",
+  "version": "0.2.0",
   "description": "param checker for node framework",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "node test/server/index.js & && mocha",
-    "spec": " mocha"
+    "test-server": "node test/server/index.js && mocha",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
