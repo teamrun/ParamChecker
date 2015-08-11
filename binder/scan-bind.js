@@ -104,7 +104,8 @@ function scanAndBind(folderAbspath, router){
                     return;
                 }
                 ctrlOpt.url = urlProcessor(ctrlOpt.url, f, folderAbspath);
-                // console.log(ctrlOpt.url);
+                var bindInfo = util.format('bind: %s %s', ctrlOpt.action, ctrlOpt.url.toString());
+                console.log(bindInfo);
                 bindToRouter(router, ctrlOpt);
             });
         }

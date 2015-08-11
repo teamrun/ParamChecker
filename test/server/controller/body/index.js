@@ -14,7 +14,7 @@ module.exports.controllers = [
             .requires('username', 'string', 'body')
             .requires('password', 'string', 'body'),
         handler: function*(next){
-            console.log('cp of', this.path, this.cp);
+            console.log('checked-param of', this.path, this.cp);
             this.body = constVars.resStr;
             // yield next;
         }
@@ -28,7 +28,7 @@ module.exports.controllers = [
             .requires('username', 'string')
             .requires('password', 'string'),
         handler: function*(next){
-            console.log('cp of', this.path, this.cp);
+            console.log('checked-param of', this.path, this.cp);
             this.body = this.cp;
         }
     }

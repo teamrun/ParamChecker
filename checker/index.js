@@ -64,12 +64,12 @@ Checker.prototype.requires = function(name, type, from, opt){
 Checker.prototype.check = function* (ctx, next){
     var errMsgs = [];
     var checkedParam = {};
-    var sti = this.paramSetting;
+    var conf = this.paramSetting;
     this.checkFuncs.forEach(function(f, i){
         // 既然name可以读, 
         // 那么其他设置也可以读
         // 也可以把"生成function"的方式调整一下吧?
-        var name = sti[i].name;
+        var name = conf[i].name;
         // console.log('checking:', name);
         var ret = f(ctx);
         if(ret.err){
@@ -105,7 +105,7 @@ module.exports = function(){
 
 
 // requires, optional 等等 都是最终要生成 针对一个参数的完整的校验函数
-// so, 高阶函数
+// ~~so, 高阶函数~~ 高阶函数太复杂 先用简单的存配置的方式实现吧
 
 // 最好只需要一次生成, 而不是每次请求来了在生成&处理
 // so, 最好是在handler外面

@@ -12,7 +12,7 @@ module.exports.controllers = [
             .requires('index', 'number', 'query')
             .requires('complete', 'boolean', 'query'),
         handler: function*(next){
-            console.log('cp of', this.path, this.cp);
+            console.log('checked-param of', this.path, this.cp);
             this.body = constVars.resStr;
             // yield next;
         }
