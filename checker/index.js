@@ -3,7 +3,7 @@ var util = require('util');
 
 // 获取参数的方法
 var get_f = require('./getValue');
-var type_f = require('./checkType');
+var check_type_f = require('./checkType');
 
 String.prototype.capitalize = function(){
     return this.slice(0,1).toUpperCase() + this.slice(1);
@@ -30,56 +30,46 @@ var Checker = function(){
     this.docInfo = [];
     return this;
 }
-Checker.prototype.requires = function(name, type, from, opt){
+Checker.prototype.requires = function(name, type, _from, opt){
     this.paramSetting.push({
         name: name,
         type: type,
+        from: _from,
         opt: opt
     });
-
-    var getFunc, validateFunc;
-    // 获取参数
-    switch(true){
-        case (from == 'body' || from == 'query' || from == 'url'):
-            var getFnName = 'from'+from.capitalize();
-            // console.log(util.format('get %s from %s by %s', name, from,  getFnName));
-            getFunc = get_f[getFnName](name);
-            break;
-        default:
-            getFunc = get_f._default(name);
-    }
-
-    // 根据类型进行校验
-    // 稍后再考虑用户自定义校验
-    validateFunc = function(value){
-        var requiredType = type;
-        return type_f(value, requiredType);
-    }
-
-    var checkerOfThisParam = genCheckFunc(getFunc, validateFunc);
-    this.checkFuncs.push(checkerOfThisParam);
 
     return this;
 }
 Checker.prototype.check = function* (ctx, next){
     var errMsgs = [];
     var checkedParam = {};
-    var conf = this.paramSetting;
-    this.checkFuncs.forEach(function(f, i){
-        // 既然name可以读, 
-        // 那么其他设置也可以读
-        // 也可以把"生成function"的方式调整一下吧?
-        var name = conf[i].name;
-        // console.log('checking:', name);
-        var ret = f(ctx);
+    var confs = this.paramSetting;
+    
+    // 取参数 -> 校验类型 -> 复杂校验(reg, enum, contains等)
+    confs.forEach(function(conf){
+        var paramName = conf.name, requiredType = conf.type, _from = conf.from;
+        var getFn;
+        switch(true){
+            case (_from == 'body' || _from == 'query' || _from == 'url'):
+                var getFnName = 'from'+_from.capitalize();
+                console.log(util.format('get %s from %s by %s', paramName, _from,  getFnName));
+                getFn = get_f[getFnName];
+                break;
+            default:
+                getFn = get_f._default;
+        }
+        var paramVal = getFn.apply(ctx, [paramName]);
+        var ret = check_type_f(paramVal, requiredType);
+
         if(ret.err){
             errMsgs.push( util.format('param error: %s,  %s', name, ret.err) );
         }
         else{
-            checkedParam[name] = ret.data;
+            checkedParam[paramName] = ret.data;
         }
-        // console.log('done:', name);
     });
+    
+
     if(errMsgs.length > 0){
         ctx.body = {
             code: 300,
