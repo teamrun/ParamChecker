@@ -5,6 +5,7 @@
 * get value, type check, value check(range, enum, hasKey, and so on)
 * test drive, debugable, benchmark
 
+希望能达到的结果:
 
     checker().requires('id', 'string', 'url', {
         // 字符串的校验, 可以传reg
