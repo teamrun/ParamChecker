@@ -26,7 +26,7 @@ var emptyF = function(){};
 
 // 弃用coit, 因为co会在异步完成的调用then/catch中一直catch错误
 // 导致不能实现expect的抛错, 达不到expect/assert的作用
-// 换用thunkify的req, 接收成功时的callback, 在callback里面做expect
+// 换用thunkify的req, 参数为 请求成功时的callback, 在callback里面做expect
 global.reqit = function(desc, reqF, sucF){
     sucF = sucF || emptyF;
     it(desc, function(done){
